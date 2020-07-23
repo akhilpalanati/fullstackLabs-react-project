@@ -1,0 +1,34 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Blocks/> should match snapshot 1`] = `
+<div>
+  <div
+    className="makeStyles-contentElement-1"
+  >
+    <p
+      className="MuiTypography-root makeStyles-indexValue-2 MuiTypography-body1"
+    >
+      001
+    </p>
+    <p
+      className="MuiTypography-root MuiTypography-body1"
+    >
+      The human Torch
+    </p>
+  </div>
+  <div
+    className="makeStyles-contentElement-1"
+  >
+    <p
+      className="MuiTypography-root makeStyles-indexValue-2 MuiTypography-body1"
+    >
+      002
+    </p>
+    <p
+      className="MuiTypography-root MuiTypography-body1"
+    >
+      The human Torch
+    </p>
+  </div>
+</div>
+`;

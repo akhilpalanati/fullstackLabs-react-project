@@ -9,7 +9,8 @@ import Node from "../components/Node";
 
 describe("<Nodes />", () => {
   const actions = {
-    checkNodeStatuses: jest.fn()
+    checkNodeStatuses: jest.fn(),
+    getBlockContent: jest.fn()
   };
 
   const nodes = {
@@ -18,13 +19,21 @@ describe("<Nodes />", () => {
         url: 'https://thawing-springs-53971.herokuapp.com',
         online: false,
         name: 'Node 1',
-        loading: false
+        loading: false,
+        blocks: {
+          loaded: false,
+          error: true
+        }
       },
       {
         url: 'https://secret-lowlands-62331.herokuapp.com',
         online: false,
         name: 'Node 2',
-        loading: false
+        loading: false,
+        blocks: {
+          loaded: false,
+          error: true
+        }
       }
     ]
   };
@@ -52,4 +61,20 @@ describe("<Nodes />", () => {
 
     expect(tree).toMatchSnapshot();
   });
+
+  it('should handle toggle node expanded', () => {
+
+    const wrapper = shallow(
+      <Nodes actions={actions} nodes ={nodes}/>
+    );
+
+    const instance = wrapper.instance();
+
+    instance.setState({expandedNodeURL: null});
+
+    instance.toggleNodeExpanded(nodes.list[0]);
+
+    expect(actions.getBlockContent).toHaveBeenCalled();
+  })
+
 });

@@ -11,13 +11,23 @@ describe('Reducers::Nodes', () => {
   const nodeA = {
     url: 'http://localhost:3002',
     online: false,
-    name: null
+    name: null,
+    blocks: {
+      loaded: false,
+      data: [],
+      error: false
+    }
   };
 
   const nodeB = {
     url: 'http://localhost:3003',
     online: false,
-    name: null
+    name: null,
+    blocks: {
+      loaded: false,
+      data: [],
+      error: false
+    }
   };
 
   it('should set initial state by default', () => {
@@ -85,6 +95,78 @@ describe('Reducers::Nodes', () => {
           online: false,
           name: 'alpha',
           loading: false
+        },
+        nodeB
+      ]
+    };
+
+    expect(reducer(appState, action)).toEqual(expected);
+  });
+
+  it('should handle GET_BLOCK_CONTENT_START', () => {
+    const appState = {
+      list: [nodeA, nodeB]
+    };
+    const action = { type: ActionTypes.GET_BLOCK_CONTENT_START, node: nodeA };
+    const expected = {
+      list: [
+        {
+          ...nodeA,
+          blocks: {
+            ...nodeA.blocks,
+            loading:true,
+
+          }
+        },
+        nodeB
+      ]
+    };
+
+    expect(reducer(appState, action)).toEqual(expected);
+  });
+
+  it('should handle GET_BLOCK_CONTENT_SUCCESS', () => {
+    const appState = {
+      list: [nodeA, nodeB]
+    };
+    
+    const res = {
+      data:[]
+    }
+    const action = { type: ActionTypes.GET_BLOCK_CONTENT_SUCCESS, node: nodeA,res };
+    const expected = {
+      list: [
+        {
+          ...nodeA,
+          blocks: {
+            ...nodeA.blocks,
+            loading:false,
+
+          }
+        },
+        nodeB
+      ]
+    };
+
+    expect(reducer(appState, action)).toEqual(expected);
+  });
+
+
+  it('should handle GET_BLOCK_CONTENT_FAILURE', () => {
+    const appState = {
+      list: [nodeA, nodeB]
+    };
+    const action = { type: ActionTypes.GET_BLOCK_CONTENT_FAILURE, node: nodeA };
+    const expected = {
+      list: [
+        {
+          ...nodeA,
+          blocks: {
+            ...nodeA.blocks,
+            loading:false,
+            error: true
+
+          }
         },
         nodeB
       ]

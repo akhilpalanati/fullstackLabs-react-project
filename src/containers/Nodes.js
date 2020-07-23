@@ -2,7 +2,8 @@ import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import * as actions from "../actions/nodes";
+import { checkNodeStatuses } from "../actions/nodes";
+import { getBlockContent }from "../actions/blocks";
 import Node from "../components/Node";
 import { Typography, Box } from "@material-ui/core";
 
@@ -20,14 +21,22 @@ export class Nodes extends React.Component {
   }
 
   toggleNodeExpanded(node) {
+    const { expandedNodeURL} = this.state;
     this.setState({
       expandedNodeURL:
-        node.url === this.state.expandedNodeURL ? null : node.url,
+        node.url === expandedNodeURL ? null : node.url,
+    }, () => {
+      if (!(node.url === expandedNodeURL)) {
+        // making api call on each expand because i want to fetch the latest blocks
+        this.props.actions.getBlockContent(node)
+      }
+
     });
   }
 
   render() {
     const { nodes } = this.props;
+
     return (
       <Box paddingTop={7}>
         <Typography variant="h4" component="h1">
@@ -48,7 +57,7 @@ export class Nodes extends React.Component {
 
 Nodes.propTypes = {
   actions: PropTypes.object.isRequired,
-  nodes: PropTypes.object.isRequired,
+  nodes: PropTypes.object.isRequired
 };
 
 function mapStateToProps(state) {
@@ -57,10 +66,8 @@ function mapStateToProps(state) {
   };
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    actions: bindActionCreators(actions, dispatch),
-  };
-}
+const mapDispatchToProps = (dispatch) => ({
+    actions: bindActionCreators({ checkNodeStatuses, getBlockContent }, dispatch),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(Nodes);
